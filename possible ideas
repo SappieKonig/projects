@@ -1,0 +1,40 @@
+General outline idea 1:
+    - make architecture as general as possible (Dense vs Transformer)
+    - generality comes at cost of more computation, solution --> pruning
+        --> problem: current pruning sucks, gotta find something that's better than setting random weight to zero
+            idea: use NN's! (graph NN, or simple Dense over input, weight and output)
+                assumptions:
+                    - there is a general pattern between neurons and their connections, regardless of task (supported by paper: general computation blablabla)
+                    - NN can approximate at least current techniques (100% true, current techniques suck)
+
+                hopes:
+                    - NN slow, so maybe it condenses to a function that can be approximated algorithmically (simple formula)
+                    - reversible, so you can start with a very sparse network and build and shave from that (more like human brain, speeds up even training and decreases memory footprint during training)
+                    - what you want three? the above two aren't paper worthy on their own?
+
+    - increased generality, even from transformers?
+        what assumptions do transformers still make about their data?
+            --> possibly the seperation of impact on itself and impact on other tokens? would a fusion be better?
+
+        hypothesis:
+            they are absolutely fine for now
+
+    SO WE WANT A TRANSFORMER THAT IS BUILT FROM SCRATCH USING REVERSE PRUNING, GOAL NUMBER ONE
+
+
+
+General outline idea 2:
+    - create meaning within a network --> clip is amazing.
+    - problem?
+        --> gpt3 might have the problem that it has only seen the abstract form of language, language is a derivative of the world around us, an abstract representation of reality. Hopes: clip --> clip connects text and vision, abstract and concrete. Hence, clip might very well be on the way towards intelligence.
+    - question?
+        --> does multi-modality automatically increase understanding? would gpt3 become smarter by feeding it videos alongside text? (temporally correlated images).
+    - test?
+        --> why not just copy a human, and see how our NN holds? As in put an NN in a human environment, or at least let it use the same senses in a simulated / web-scraped environment
+    - DO NOT HAVE THAT KIND OF COMPUTE, NOT A VIABLE OPTION AS OF YET, JUST WANNA SEE WHAT HAPPENS
+
+
+
+General outline idea 3:
+    - curriculum! What speedups can curricula give us? Should be quite a bit if they kick as much ass as I hope them to
+    - AGAIN, NOT AS VIABLE ON SMALL SCALE, SO EITHER GOTTA FIND A WAY TO MINIMIZE IT OR HACK GOOGLE'S DATACENTERS
