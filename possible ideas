@@ -38,3 +38,17 @@ General outline idea 2:
 General outline idea 3:
     - curriculum! What speedups can curricula give us? Should be quite a bit if they kick as much ass as I hope them to
     - AGAIN, NOT AS VIABLE ON SMALL SCALE, SO EITHER GOTTA FIND A WAY TO MINIMIZE IT OR HACK GOOGLE'S DATACENTERS
+
+
+
+General outline idea 4:
+    - consensus labelling --> label = what most networks think it is. Goal? To train with as little given labels as possible. Ensemble, yes, but ensembles are too interesting to just ignore --> downsides, from what I know, already heavily explored
+
+
+
+General outline idea 5:
+    - autoencoding through multitude of text-image models as a way of creating captions on an image.
+    - many language models just talking with one another, see what happens
+        --> problem? NNs don't work without a goal. So how about curiosity? Try to get the other network to say words you haven't often heard whilst maximising the probability other networks agree with both you and your conversation partner
+            --> goal: interesting conversation, whilst still being logical (hence checked by others)
+                --> cooler goal: see what the heck language models can do (still think text-image is essential, maybe even text-video)

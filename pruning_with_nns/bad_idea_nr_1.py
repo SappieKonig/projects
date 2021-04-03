@@ -82,7 +82,7 @@ def attempt(x, y, x_test, y_test, epochs, prune_p=.05, randomness=.0):
 
     p_left = 1
 
-    batch_size = 256
+    batch_size = 64
 
     acc_list = []
     inputs_prune = []
@@ -254,10 +254,10 @@ for step in range(steps):
     blocked = np.tile(blocked, (1, 1, batch_size))
     reward = np.tile(reward, (1, 1, inputs.shape[2]))
 
-    inputs = inputs.reshape((-1, 3))
-    outputs = outputs.reshape((-1, 1))
-    blocked = blocked.reshape((-1, 1))
-    reward = reward.reshape((-1, 1))
+    inputs = inputs.reshape((-1, 3)).astype(np.float32)
+    outputs = outputs.reshape((-1, 1)).astype(np.float32)
+    blocked = blocked.reshape((-1, 1)).astype(np.float32)
+    reward = reward.reshape((-1, 1)).astype(np.float32)
 
     indices = np.arange(len(inputs))
     np.random.shuffle(indices)
@@ -276,6 +276,7 @@ for step in range(steps):
         with tf.GradientTape() as tape:
             output = prune_net(net_in)
             loss = tf.reduce_sum(tf.keras.losses.mse(net_out, output)) / len(net_in) ** .5
+            print(loss)
 
         train_vars = prune_net.trainable_variables
         grads = tape.gradient(loss, train_vars)
