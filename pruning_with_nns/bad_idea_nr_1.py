@@ -1,5 +1,5 @@
-import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+# import os
+# os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 import tensorflow as tf
 import tqdm
 import numpy as np
@@ -188,10 +188,6 @@ def attempt(x, y, x_test, y_test, epochs, prune_p=.05, randomness=.0):
 
         # time.sleep(1000)
 
-        indices = np.arange(len(x_test))
-        np.random.shuffle(indices)
-        x_test = x_test[indices]
-        y_test = y_test[indices]
         batches = math.ceil(len(x_test) / batch_size)
         x_batches = np.array_split(x_test, batches)
         y_batches = np.array_split(y_test, batches)
@@ -216,7 +212,7 @@ def attempt(x, y, x_test, y_test, epochs, prune_p=.05, randomness=.0):
             # p_bar.set_description(f"Val_loss: {np.sum(loss_arr[loss_arr != 0]) / np.sum(count_arr[count_arr != 0])}, "
             #                       f"val_acc: {np.sum(acc_arr[acc_arr != 0]) / np.sum(count_arr[count_arr != 0])}")
         acc_list += [np.sum(acc_arr[acc_arr != 0]) / np.sum(count_arr[count_arr != 0])]
-    return inputs_prune, outputs_prune, blocked_prune, acc_list
+    return np.array(inputs_prune, dtype=np.float32), np.array(outputs_prune, dtype=np.float32), np.array(blocked_prune, dtype=np.float32), np.array(acc_list, dtype=np.float32)
 
 
 epochs = 10
@@ -227,7 +223,6 @@ steps = 10000
 
 for step in range(steps):
     runs_ran = 0
-    expected = np.zeros(epochs)
     inputs, outputs, blocked, reward = [], [], [], []
     for _ in range(runs):
         i, o, b, r = attempt(x, y, x_test, y_test, epochs, randomness=.1, prune_p=.05)
@@ -237,15 +232,14 @@ for step in range(steps):
         reward += [r]
         print(step, _, r)
     reward = decay_and_normalize(reward, .9)
-    expected = runs_ran * expected + np.sum(reward.reshape((-1, epochs)), axis=0)
+    expected = np.average(reward.reshape((-1, epochs)), axis=0)
     runs_ran += runs
-    expected /= runs_ran
     reward = reward.reshape((-1, epochs)) - expected
     reward = reward / np.std(reward)
 
-    inputs = np.array(inputs)
-    outputs = np.array(outputs)
-    blocked = np.array(blocked)
+    inputs = np.array(inputs, dtype=np.float32)
+    outputs = np.array(outputs, dtype=np.float32)
+    blocked = np.array(blocked, dtype=np.float32)
     reward = np.array(reward).reshape((runs, epochs, 1))
 
     batch_size = int(inputs.shape[2] / outputs.shape[2])
@@ -254,10 +248,10 @@ for step in range(steps):
     blocked = np.tile(blocked, (1, 1, batch_size))
     reward = np.tile(reward, (1, 1, inputs.shape[2]))
 
-    inputs = inputs.reshape((-1, 3)).astype(np.float32)
-    outputs = outputs.reshape((-1, 1)).astype(np.float32)
-    blocked = blocked.reshape((-1, 1)).astype(np.float32)
-    reward = reward.reshape((-1, 1)).astype(np.float32)
+    inputs = inputs.reshape((-1, 3))
+    outputs = outputs.reshape((-1, 1))
+    blocked = blocked.reshape((-1, 1))
+    reward = reward.reshape((-1, 1))
 
     indices = np.arange(len(inputs))
     np.random.shuffle(indices)
@@ -265,7 +259,7 @@ for step in range(steps):
     inputs = inputs[indices]
     outputs = outputs[indices]
     blocked = blocked[indices]
-    reward = blocked[indices]
+    reward = reward[indices]
 
     inputs = np.array_split(inputs, batches)
     outputs = np.array_split(outputs, batches)
@@ -275,13 +269,10 @@ for step in range(steps):
     for net_in, net_out, block, adv in zip(inputs, outputs, blocked, reward):
         with tf.GradientTape() as tape:
             output = prune_net(net_in)
-            loss = tf.reduce_sum(tf.keras.losses.mse(net_out, output)) / len(net_in) ** .5
-            print(loss)
+            loss = tf.reduce_mean(tf.keras.losses.mse(net_out, output)) * block * adv
 
         train_vars = prune_net.trainable_variables
         grads = tape.gradient(loss, train_vars)
         prune_optimizer.apply_gradients(zip(grads, train_vars))
 
-    tf.keras.models.save_model(prune_optimizer, "C:/tensorTestModels/prune_learner")
-
-    print(inputs.shape, outputs.shape, blocked.shape, reward.shape)
+    tf.keras.models.save_model(prune_net, "C:/tensorTestModels/prune_learner")
