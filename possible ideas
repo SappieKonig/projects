@@ -52,3 +52,11 @@ General outline idea 5:
         --> problem? NNs don't work without a goal. So how about curiosity? Try to get the other network to say words you haven't often heard whilst maximising the probability other networks agree with both you and your conversation partner
             --> goal: interesting conversation, whilst still being logical (hence checked by others)
                 --> cooler goal: see what the heck language models can do (still think text-image is essential, maybe even text-video)
+
+
+
+General outline idea 6:
+    - weights are practically linear correlation coefficients between different neurons. So could we train them as correlations? Increase the weight in the direction of the correlation between neurons if the netwerk did good, decrease it otherwise.
+    - benefits:
+        1. no need for gradients
+        2. direct training on advantages
