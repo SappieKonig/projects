@@ -74,12 +74,10 @@ class Network:
 
     def back_prop(self, x, label):
         self.propagate(x)
-        score = tf.cast(accuracy(label, self.output), dtype=tf.float32)
-        print(f"accuracy: {np.mean(score)}")
-        adv = (score - tf.reduce_mean(score)) / tf.math.reduce_std(score)
-        self.layers[0].back_prop(adv, x)
-        for i in range(1, len(self.layers)):
-            self.layers[i].back_prop(adv, self.layers[i-1].a)
+        print(f"accuracy: {np.mean(accuracy(label, self.output))}", f"loss: {np.mean(np.sum(self.cost(label, self.output), axis=-1))}")
+        der = self.der_cost(label, self.output)
+        for layer in reversed(self.layers):
+            der = layer.back_prop(der)
 
 
 
@@ -105,11 +103,20 @@ class Layer:
         self.weights = tf.random.normal(shape=(self.n_in, self.n_out), stddev=(2/(self.n_in + self.n_out))**.5)
 
 
-    def back_prop(self, adv, tensor_in):
+    def back_prop(self, der):
 
-        cor = tf.matmul(tf.transpose(tensor_in), self.a * tf.reshape(adv, (-1, 1)))
-        self.weights += self.lr * cor
+        d_out = tf.reshape(der * self.d_activation(self.z), (-1, 1, self.n_out))
 
+        d_weights = d_out * tf.reshape(self.x, (-1, self.n_in, 1))
+
+
+
+        self.weights -= self.lr * tf.reduce_mean(d_weights, axis=0)
+        self.biases -= self.lr * tf.reduce_mean(d_out, axis=(0, 1))
+
+        d_in = tf.reshape(self.weights, (1, self.n_in, self.n_out)) * d_out
+
+        return tf.reduce_sum(d_in, axis=2)
 
     def __call__(self, *args, **kwargs):
         x = args[0]
