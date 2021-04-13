@@ -60,3 +60,15 @@ General outline idea 6:
     - benefits:
         1. no need for gradients
         2. direct training on advantages
+
+
+
+General outline idea 7:
+    - generalization of Dream oder --> NNs as functions
+    - things to look at: 
+        1. Function parsing --> breaking NN into multiple blocks
+           Idea: data goes through singular layers where the flow is controlled by a controller network. 
+                 These smaller networks serve as function. Loss that minimizes the amount of layers used? Sort of line minimalizer.
+        2. Output generality: for a network to be general its output should be general as well. How can one output be interpreted by multiple tasks? 
+           Idea: text --> input to general output to task specific output.
+        3. Curriculum --> this one is difficult.
