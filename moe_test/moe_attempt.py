@@ -1,10 +1,11 @@
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+import logging
+logging.getLogger('tensorflow').disabled = True
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import tensorflow as tf
+tf.get_logger().setLevel('INFO')
 import numpy as np
-from tqdm.contrib import tzip
 import tqdm
-import mesh_tensorflow as mtf
 
 (x, y), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
 
@@ -13,6 +14,14 @@ x_test = np.reshape(x_test, (-1, 784))/255
 
 y = tf.one_hot(y, 10).numpy()
 y_test = tf.one_hot(y_test, 10).numpy()
+
+(x, y), (x_test, y_test) = tf.keras.datasets.cifar10.load_data()
+
+x = np.reshape(x, (-1, 3072))/255
+x_test = np.reshape(x_test, (-1, 3072))/255
+
+y = tf.one_hot(tf.reshape(y, (-1,)), 10).numpy()
+y_test = tf.one_hot(tf.reshape(y_test, (-1,)), 10).numpy()
 
 
 class MoE(tf.keras.layers.Layer):
@@ -62,7 +71,7 @@ class MoE(tf.keras.layers.Layer):
             if len(sample_to_expert[i]) != 0:
                 y[i] = self.experts[i](tf.gather(inputs, sample_to_expert[i]))
         # y = [self.experts[i](tf.gather(inputs, sample_to_expert[i])) for i in range(self.n_experts)]
-        output_placeholder = tf.zeros(shape=(shape[0],) + (self.k,) + shape[1:])
+        output_placeholder = tf.zeros(shape=(shape[0],) + (self.k,) + shape[1:-1] + (self.n_out,))
 
 
         for i, y_expert in enumerate(y):
@@ -116,10 +125,10 @@ def gate(gate_odds, k):
 
 
 
-in_layer = tf.keras.layers.Dense(50, "relu")
+# in_layer = tf.keras.layers.Dense(50, "relu")
 # layer_1 = MoE(20, 20, 100, k=3)
 # layer_2 = MoE(20, 20, 100, k=3)
-model = MoE_net(50, 50, 10, 0, k=3)
+model = MoE_net(3072, 100, 20, 1, k=3)
 out = tf.keras.layers.Dense(10, "softmax")
 
 
@@ -128,7 +137,7 @@ acc = tf.keras.metrics.categorical_accuracy
 
 # model = tf.keras.models.Sequential([in_layer, layer_1, layer_2, out])
 
-for epoch in range(10):
+for epoch in range(100):
     indices = np.arange(len(x))
     np.random.shuffle(indices)
 
@@ -143,17 +152,21 @@ for epoch in range(10):
     for x_batch, y_batch in zip(p_bar, np.array_split(y, batches)):
         with tf.GradientTape() as tape:
             aux_loss = 0
-            a = in_layer(x_batch)
-            a, l1 = model(a)
+            # a = in_layer(x_batch)
+            a, l1 = model(x_batch)
             aux_loss += l1*.01
             a = out(a)
             cat_loss = tf.reduce_sum(loss(y_batch, a))
             l = cat_loss + aux_loss
-            p_bar.set_description(f"acc: {round(float(tf.reduce_sum(acc(y_batch, a)) / batch_size), 2)}, loss: {round(float(cat_loss / batch_size), 2)}", refresh=True)
+            p_bar.set_description(f"acc: {round(float(tf.reduce_sum(acc(y_batch, a)) / len(x_batch)), 2)}, loss: {round(float(cat_loss / len(x_batch)), 2)}", refresh=True)
 
-        vars = in_layer.trainable_variables + model.trainable_variables + out.trainable_variables
+        vars = \
+            model.trainable_variables + out.trainable_variables
         grads = tape.gradient(l, vars)
         optimizer.apply_gradients(zip(grads, vars))
 
+    a, _ = model(x_test)
+    a = out(a)
+    print(tf.reduce_mean(acc(y_test, a)))
 
 
