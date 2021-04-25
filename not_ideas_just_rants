@@ -1,0 +1,17 @@
+The same universal approximation theorem that states that given a hidden layer of infinite size, any function can be approximated, also yields that for this you need an infinite
+number of data points. So let us restate the definition of a neural network from --> universal function approximators to --> universally bad function approximators. 
+
+In this rant I would like to focus on how especially bad a neural network is at discovering patterns between input variables, that is, if in f(x, y) there is an operation including
+both x and y, then a neural network would need infinite data points to approximate it correctly. So neural networks are good at going from single input to output. Transformers up
+this by one, inherently looking at higher layers of abstractions, going from a single input to infinite inputs proven by their independency on position. The next layer could be
+going from a single datapoint at a time to all datapoints, also known as the underlying function. The step after that would be going from a single function to all possible functions.
+
+Is there a way to infinitely approximate these layers of abstraction instead of one at a time?
+
+Other than by quantum computing, how would you calculate a function in its entirety in polynomial time? --> probably: you can't.
+
+The assumption that datapoints are interlinked is obviously nothing new (that's kind of the whole point of neural networks, finding that relation or in other words the underlying function).
+
+But can or should it be incorporated in a neural network?
+
+Food for thought.
