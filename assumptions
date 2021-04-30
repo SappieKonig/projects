@@ -16,7 +16,8 @@ Most interesting ones, assumption of UNSUPERVISED networks:
   
 Interesting notes:
   - The assumptions of depth estimation can be reformulated as the first law of Newton
-  
+  - Humans might very well learn these assumption through a predictive model.
+    How in god's name do you combine a predictive model and unsupervised learning?
   
   
   Humans make these same assumptions when learning, are these a priori or LEARNT biases?
