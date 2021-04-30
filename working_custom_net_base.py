@@ -81,6 +81,7 @@ class Network:
 
 
 
+            
 class Layer:
 
     def __init__(self, n_out, activation=linear, starting_prune=1., beta=.0):
