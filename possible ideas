@@ -79,3 +79,12 @@ General outline idea 8:
   - unsupervised learning through GPT style training
   - contrastive loss between model(x) and model(gpt(x))
   - still only enforces coherence of position, making it quite fucking limited
+
+
+
+General outline idea 9:
+  - better safe than sorry --> instead of predicting the next word, pick x items.
+    For these items, the loss will be ignored. The default output is set to zero. 
+    The loss increases slightly per mask, but by a much larger amount if the correct token
+    is not somewhere the masks are. The hope is that this is a much less aggressive pretraining method, 
+    decreasing bias when fine-tuning.
