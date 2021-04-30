@@ -1,0 +1,45 @@
+In order to achieve high quality, models always make, often reasonable, assumptions. 
+
+Here I try to list some of them to get my mind right, and so I can sleep instead of think.
+
+GENERAL ASSUMPTIONS:
+  - the loss landscape is smooth
+  - a low loss corresponds to high accuracy (not really an assumption as it is mathematically provable, but there is some play in this regime)
+  - plenty more but let's not think more, gotta sleep, this is meant to clear my mind not fill it
+  
+  
+  
+Most interesting ones, assumption of UNSUPERVISED networks:
+  - SwAV --> coherence of scene
+  - Depth estimation --> coherence of temporal scenes (staticity of position)
+  
+  
+Interesting notes:
+  - The assumptions of depth estimation can be reformulated as the first law of Newton
+  
+  
+  
+  Humans make these same assumptions when learning, are these a priori or LEARNT biases?
+  
+What other assumptions can be made (currently video-centric without audio --> I'm a visual person, sue me)?
+  - What belongs to "an object" can be seen as something at a consistent depth at relatively constant speeds. (sizes of objects are limited compared to their surroundings + Newton's first law)
+  - Objects whose center of movement corresponds with another object can be fused --> arms of a human body
+  
+  
+  
+AGE OLD QUESTION:
+  - These assumptions are all biases, and as far as humans know, they are human biases. What sort of system could spawn these biases?
+  - If the system that spawns these biases is "one extra layer of abstractions", then by that formulation, is there ever a limit? And if there isn't, can it be right?
+    It feels like trying to learn something by looking at its 100th derivative, it does not feel effective per se after the first few steps.
+  - NOW LISTEN HERE YOU LITTLE SHIT, BEFORE GOING ALL PHILOSOPHY HOW ABOUT YOU TRY EVEN FUCKING ONE OF THESE?
+  - Step by step program: 1. Research unsupervised approaches, they ain't hard but they well implemented.
+                          2. Mix in assumptions.
+                          3. Make general so assumptions can be thrown in on the fly.
+                          4. Throw in some multi-modality, because FUCK YES.
+                          5. Buy google.
+                          6. Beg for citations.
+                          7. Gogogadget conference.
+                          8. Profit.
+  
+ 
+OF COURSE THERE ARE PLENTY MORE, BUT AT THIS POINT IN TIME THESE LEAD MY THOUGHT PROCESS  
