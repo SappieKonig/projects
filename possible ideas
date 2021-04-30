@@ -72,3 +72,10 @@ General outline idea 7:
         2. Output generality: for a network to be general its output should be general as well. How can one output be interpreted by multiple tasks? 
            Idea: text --> input to general output to task specific output.
         3. Curriculum --> this one is difficult.
+
+
+
+General outline idea 8:
+  - unsupervised learning through GPT style training
+  - contrastive loss between model(x) and model(gpt(x))
+  - still only enforces coherence of position, making it quite fucking limited
