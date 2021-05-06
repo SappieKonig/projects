@@ -23,3 +23,5 @@ Current approaches try to learn this function f, but humans created this funtion
 We are not deep enough into complexity.
 
 How far is this from auto-encoding though? Kind of meh idea if you ask me.
+
+Auto encoding can be seen as a composite of f and f inverse, invalidating my whole point. Great job dude, great job.
