@@ -15,3 +15,11 @@ The assumption that datapoints are interlinked is obviously nothing new (that's 
 But can or should it be incorporated in a neural network?
 
 Food for thought.
+
+
+Problems with current language modelling --> language is a compact representation of the real world, or in other words, language is a compression function f over the real world x.
+Current approaches try to learn this function f, but humans created this funtion f, so in other words, humans can be seen as g, where g: g(x) --> f.
+
+We are not deep enough into complexity.
+
+How far is this from auto-encoding though? Kind of meh idea if you ask me.
