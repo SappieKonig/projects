@@ -88,3 +88,6 @@ General outline idea 9:
     The loss increases slightly per mask, but by a much larger amount if the correct token
     is not somewhere the masks are. The hope is that this is a much less aggressive pretraining method, 
     decreasing bias when fine-tuning.
+
+  - Scrap this stupid shit, it only has a chance of working when n_classes is in the same order as n_hidden.
+    If not, the embedding will be forced into a relative continuum with good accuracy.
