@@ -1,7 +1,7 @@
 This is the basic implementation of the "better safe than sorry" pre-training scheme.
 
 The general idea is that a second head is added with a sigmoid activation function, in such a way that the loss function becomes:
-CE(head1, target) --> CE(head1 * (1 - head2), target) + α * head2.sum(axis=-1)
+CE(head1, target).mean() --> CE(head1 * (1 - head2), target).mean() + α * head2.sum(axis=-1).mean()
 
 In the typical case, α is very low, for example .01. So the model will quickly learn to increase the sigmoid values of the likely targets towards 1 and
 all others towards 0. This changes the objective from optimizing for 1 token towards minimizing the number of possible tokens. 
