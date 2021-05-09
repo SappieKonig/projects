@@ -1,3 +1,8 @@
+Ignore this thing, supposed to go into a project I gotta dump into this directory
+
+
+
+
 This is the basic implementation of the "better safe than sorry" pre-training scheme.
 
 The general idea is that a second head is added with a sigmoid activation function, in such a way that the loss function becomes:
