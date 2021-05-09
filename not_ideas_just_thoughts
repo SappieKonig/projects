@@ -1,0 +1,8 @@
+RL suffers from terrible efficiency (43 million frames for pong, yes I know that that was a pod racer dick measuring contest, but still)
+
+Part of this problem could be the incredibly huge state space.
+
+In unsupervised learning this space is reduced by optimizing on a problem meant to mimic classification to some extent.
+
+Is it possible to do this in RL? Goal guided compression?
+
