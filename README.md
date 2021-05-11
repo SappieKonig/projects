@@ -1,6 +1,6 @@
 Ignore this thing, supposed to go into a project I gotta dump into this directory
 
-
+Double ignore it, I just killed pre-training
 
 
 This is the basic implementation of the "better safe than sorry" pre-training scheme.
