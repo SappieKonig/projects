@@ -1,0 +1,23 @@
+Transformers, or neural networks in general, as they stand, will never reach AGI.
+I've only recently turned around on this. Sucked into the hype of ever-increasing benchmark crushing.
+But what has turned me around is that now it seems the ridiculous data needs of neural networks are prohibitive to further progress in AI.
+
+A potential follow-up for transformers should have generalization at its core. Currently I would identify generalization in a few key ways:
+- memorization vs algorithmics in LLMs
+- multiple levels of thinking (strange local phenomena can often be explained by abstracting it either one level higher or lower (QM, GR))
+- relative/ no positions -> positional embeddings suck the life out of learning. 
+
+
+
+More parameters as a regularization (why sparse network suck):
+I've recently tried to investigate why NNs do what they do. And the most straightforward way to do this, is to backpropagate to see
+what inputs caused what. This, however, runs into two problems. The most obvious one is the locality problem. A function in multiple
+variables might be completely determined by one variable only, if you're at a minimum of said function with respect to that variable (as is ideally the case for a fully trained
+network) all variables will seem equally useless.
+
+Second is the fact that the "size" of a gradient for a given input doesn't actually say anything. You could double the average input and half 
+the weights in the first layer and every output would be the same. So absolute values don't matter, but how do we know relative values matter?
+Well, this can be slightly guaranteed through having all inputs communicate through the same neurons in the second layer, since all "messages" will 
+end up in the same form factor. But in sparse networks not all inputs make it to every output, removing this regularization and need for 
+compressing every (neuron, weight) pair to a similar type of message (read, similar distribution). 
+
